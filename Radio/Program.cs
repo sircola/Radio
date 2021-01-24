@@ -43,7 +43,7 @@ namespace Radio
 
                 reszek = kettospont[1].Split(' ');
                 szam.cim = "";
-                foreach( string s in reszek )
+                foreach (string s in reszek)
                     szam.cim += s + " ";
                 szam.cim = szam.cim.Trim();
 
@@ -53,7 +53,7 @@ namespace Radio
 
             Console.WriteLine("1. feladat");
             List<string> clapton = new List<string>();
-            foreach( Szam szam in szamok )
+            foreach (Szam szam in szamok)
                 if (szam.eloado == "Eric Clapton")
                 {
                     bool voltmar = false;
@@ -71,16 +71,27 @@ namespace Radio
             foreach (Szam szam in szamok)
                 idok[szam.radio - 1] += szam.perc * 60 + szam.masodperc;
 
-            for(int i=0; i<3; i++)
-                Console.WriteLine($"{i+1}. radio musorideje: {idok[i]/3600,0:D2}:{(idok[i] % 3600)/60,1:D2}:{idok[i]% 60,2:D2}");
+            for (int i = 0; i < 3; i++)
+                Console.WriteLine($"{i + 1}. radio musorideje: {idok[i] / 3600,0:D2}:{(idok[i] % 3600) / 60,1:D2}:{idok[i] % 60,2:D2}");
 
             Console.WriteLine("3. feladat");
-            int mennyi = 0;
-            foreach(Szam szam in szamok)
+            List<Szam> dupla = new List<Szam>();
+            foreach (Szam szam in szamok)
                 foreach (Szam s in szamok)
-                    if (szam.cim == s.cim && szam.eloado == s.eloado && szam.radio != s.radio)
-                        ++mennyi;
-            Console.WriteLine(mennyi > 1 ? "vannak" : mennyi == 1 ? "van" : "nincs");
+                    if (szam.cim == s.cim && szam.eloado == s.eloado && szam.radio != s.radio) { 
+                        bool voltmar = false;
+                        foreach (Szam d in dupla)
+                            if (d.cim == szam.cim && d.eloado == szam.eloado)
+                                voltmar = true;
+                        if (voltmar == false)
+                        {
+                            Szam d = new Szam();
+                            d.cim = szam.cim;
+                            d.eloado = szam.eloado;
+                            dupla.Add(d);
+                        }
+                    }
+            Console.WriteLine(dupla.Count > 1 ? "vannak" : dupla.Count == 1 ? "van" : "nincs");
 
             Console.WriteLine("nyomjon egy billentyut...");
             Console.ReadKey(true);
